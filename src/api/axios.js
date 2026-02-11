@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8081", // your Spring Boot URL
+ baseURL: "https://digital-wallet-backend-lbdp.onrender.com"
+ // your Spring Boot URL
 });
 
 // Attach JWT automatically
