@@ -1,70 +1,163 @@
-# Getting Started with Create React App
+# 💻 Digital Wallet Frontend (React + Axios + JWT)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend application for the Digital Wallet system built using React.js.
 
-## Available Scripts
+This app connects to the Spring Boot backend using JWT authentication.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ✅ User Registration
+- ✅ User Login
+- ✅ JWT Token Handling
+- ✅ Add Money
+- ✅ Transfer Money
+- ✅ View Wallet Balance
+- ✅ Transaction History
+- ✅ Protected Routes
+- ✅ Clean UI with CSS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🛠 Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend:** React.js
+- **HTTP Client:** Axios
+- **Authentication:** JWT (stored in localStorage)
+- **Routing:** React Router
+- **Styling:** CSS
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📂 Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+src/
+│
+├── api/
+│   └── axios.js
+│
+├── components/
+│   ├── Login.js
+│   ├── Register.js
+│   ├── Dashboard.js
+│   ├── PrivateRoutes.js
+│
+├── styles/
+│   ├── Login.css
+│   ├── Dashboard.css
+│
+└── App.js
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🔐 Authentication Flow
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. User logs in
+2. Backend returns JWT + userId
+3. Token stored in localStorage
+4. Axios automatically attaches:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+Authorization: Bearer <token>
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. Protected routes require valid token
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## ⚙️ Setup Instructions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 1️⃣ Clone Repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+git clone https://github.com/sharief44/digital-wallet-frontend.git
+cd digital-wallet-frontend
+```
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 2️⃣ Install Dependencies
 
-### Analyzing the Bundle Size
+```bash
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+### 3️⃣ Configure Backend URL
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Inside:
 
-### Advanced Configuration
+```
+src/api/axios.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Make sure baseURL matches backend:
 
-### Deployment
+```javascript
+baseURL: "http://localhost:8080",
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+### 4️⃣ Start Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm start
+```
+
+App runs on:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 🔌 Backend Connection
+
+Make sure backend is running:
+
+```
+http://localhost:8080
+```
+
+---
+
+## 📦 API Used
+
+| Action | Endpoint |
+|--------|----------|
+| Register | POST `/api/users/register` |
+| Login | POST `/api/users/login` |
+| Add Money | POST `/api/wallet/add` |
+| Balance | GET `/api/wallet/balance/{userId}` |
+| Transfer | POST `/api/wallet/transfer` |
+| Transactions | GET `/api/wallet/transactions/{userId}` |
+
+---
+
+## 📈 Future Improvements
+
+- Better UI Design
+- Toast Notifications
+- Loading Spinners
+- Error Handling UI
+- Dark Mode
+- Deployment to Vercel / Netlify
+
+---
+
+## 👨‍💻 Author
+
+Sharief Sk  
+Full Stack Java Developer  
+
+---
+
+## ⭐ Support
+
+If you like this project, give it a ⭐ on GitHub!
