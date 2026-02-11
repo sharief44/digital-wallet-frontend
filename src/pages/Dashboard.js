@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../api/axios";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
-
 
 function Dashboard() {
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState("");
 
   const [successMsg, setSuccessMsg] = useState("");
-const [errorMsg, setErrorMsg] = useState("");
-
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [toUserId, setToUserId] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
@@ -18,85 +16,81 @@ const [errorMsg, setErrorMsg] = useState("");
   const [transactions, setTransactions] = useState([]);
 
   const userId = localStorage.getItem("userId");
-
   const navigate = useNavigate();
 
-
   // ---------- API CALLS ----------
-  const fetchBalance = () => {
+
+  const fetchBalance = useCallback(() => {
     api
       .get(`/api/wallet/balance/${userId}`)
       .then((res) => setBalance(res.data))
       .catch((err) => console.error(err));
-  };
+  }, [userId]);
 
-  const fetchTransactions = () => {
+  const fetchTransactions = useCallback(() => {
     api
       .get(`/api/wallet/transactions/${userId}`)
       .then((res) => setTransactions(res.data))
       .catch((err) => console.error(err));
-  };
+  }, [userId]);
 
   const addMoney = () => {
-  setSuccessMsg("");
-  setErrorMsg("");
+    setSuccessMsg("");
+    setErrorMsg("");
 
-  api
-    .post(`/api/wallet/add?userId=${userId}&amount=${amount}`)
-    .then(() => {
-      setSuccessMsg("Money added successfully");
-      setAmount("");
-      fetchBalance();
-      fetchTransactions();
-    })
-    .catch(() => {
-      setErrorMsg("Failed to add money");
-    });
-};
+    api
+      .post(`/api/wallet/add?userId=${userId}&amount=${amount}`)
+      .then(() => {
+        setSuccessMsg("Money added successfully");
+        setAmount("");
+        fetchBalance();
+        fetchTransactions();
+      })
+      .catch(() => {
+        setErrorMsg("Failed to add money");
+      });
+  };
 
-const transferMoney = () => {
-  setSuccessMsg("");
-  setErrorMsg("");
+  const transferMoney = () => {
+    setSuccessMsg("");
+    setErrorMsg("");
 
-  api
-    .post(
-      `/api/wallet/transfer?fromUserId=${userId}&toUserId=${toUserId}&amount=${transferAmount}`
-    )
-    .then(() => {
-      setSuccessMsg("Transfer successful");
-      setToUserId("");
-      setTransferAmount("");
-      fetchBalance();
-      fetchTransactions();
-    })
-    .catch(() => {
-      setErrorMsg("Transfer failed (check balance or user ID)");
-    });
-};
-
+    api
+      .post(
+        `/api/wallet/transfer?fromUserId=${userId}&toUserId=${toUserId}&amount=${transferAmount}`
+      )
+      .then(() => {
+        setSuccessMsg("Transfer successful");
+        setToUserId("");
+        setTransferAmount("");
+        fetchBalance();
+        fetchTransactions();
+      })
+      .catch(() => {
+        setErrorMsg("Transfer failed (check balance or user ID)");
+      });
+  };
 
   useEffect(() => {
     fetchBalance();
     fetchTransactions();
-  }, []);
-
+  }, [fetchBalance, fetchTransactions]);
 
   const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("email");
-
-  navigate("/");
-};
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("email");
+    navigate("/");
+  };
 
   // ---------- UI ----------
   return (
     <div className="dashboard-container">
       <h2 className="dashboard-title">Digital Wallet Dashboard</h2>
-      {successMsg && <div className="alert success">{successMsg}</div>}
-{errorMsg && <div className="alert error">{errorMsg}</div>}
 
-       
+      {successMsg && <div className="alert success">{successMsg}</div>}
+      {errorMsg && <div className="alert error">{errorMsg}</div>}
+
       {/* Wallet Balance */}
       <div className="card">
         <h3>Wallet Balance</h3>
@@ -154,17 +148,19 @@ const transferMoney = () => {
                 {tx.type}
               </span>
               <span>₹ {tx.amount}</span>
-              <small>{tx.timestamp}</small>
+              <small>
+                {new Date(tx.timestamp).toLocaleString()}
+              </small>
             </li>
           ))}
         </ul>
       </div>
-      <div style={{ textAlign: "right", marginBottom: "10px" }}>
-  <button onClick={logout} className="button">
-    Logout
-  </button>
-</div>
 
+      <div style={{ textAlign: "right", marginBottom: "10px" }}>
+        <button onClick={logout} className="button">
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
