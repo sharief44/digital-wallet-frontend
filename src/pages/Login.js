@@ -1,0 +1,75 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import "./Login.css";
+import "./Signup"
+
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await api.post("/api/users/login", {
+        email,
+        password,
+      });
+
+      // store auth details
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.userId);
+      localStorage.setItem("email", response.data.email);
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Invalid email or password");
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Digital Wallet Login</h2>
+
+        {error && <p className="error-text">{error}</p>}
+
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="login-input"
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="login-input"
+            required
+          />
+
+          <button type="submit" className="login-button">
+            Login
+          </button>
+          <p className="switch-text">
+  Don’t have an account?{" "}
+  <span onClick={() => navigate("/Signup")}>Sign Up</span>
+</p>
+
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Login;

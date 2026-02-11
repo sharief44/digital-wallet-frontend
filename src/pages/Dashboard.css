@@ -1,0 +1,102 @@
+/* Page container */
+.dashboard-container {
+  max-width: 650px;
+  margin: 40px auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Page title */
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Card layout */
+.card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Wallet balance */
+.balance {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c7be5;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.button {
+  width: 100%;
+  padding: 10px;
+  background: #2c7be5;
+  color: #ffffff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background: #1a5dcc;
+}
+
+/* Transaction list */
+.tx-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Transaction item */
+.tx-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Credit / Debit colors */
+.tx-credit {
+  color: green;
+  font-weight: bold;
+}
+
+.tx-debit {
+  color: red;
+  font-weight: bold;
+}
+
+/* Alerts */
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.alert.success {
+  background: #e6fffa;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.alert.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
