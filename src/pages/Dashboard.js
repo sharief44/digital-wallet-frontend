@@ -85,84 +85,108 @@ function Dashboard() {
 
   // ---------- UI ----------
   return (
-    <div className="dashboard-container">
-      <h2 className="dashboard-title">Digital Wallet Dashboard</h2>
-
-      {successMsg && <div className="alert success">{successMsg}</div>}
-      {errorMsg && <div className="alert error">{errorMsg}</div>}
-
-      {/* Wallet Balance */}
-      <div className="card">
-        <h3>Wallet Balance</h3>
-        <p className="balance">₹ {balance}</p>
-      </div>
-
-      {/* Add Money */}
-      <div className="card">
-        <h3>Add Money</h3>
-        <input
-          type="number"
-          placeholder="Enter amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="input"
-        />
-        <button onClick={addMoney} className="button">
-          Add Money
-        </button>
-      </div>
-
-      {/* Transfer Money */}
-      <div className="card">
-        <h3>Transfer Money</h3>
-        <input
-          type="number"
-          placeholder="To User ID"
-          value={toUserId}
-          onChange={(e) => setToUserId(e.target.value)}
-          className="input"
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={transferAmount}
-          onChange={(e) => setTransferAmount(e.target.value)}
-          className="input"
-        />
-        <button onClick={transferMoney} className="button">
-          Transfer
-        </button>
-      </div>
-
-      {/* Transaction History */}
-      <div className="card">
-        <h3>Transaction History</h3>
-        <ul className="tx-list">
-          {transactions.map((tx) => (
-            <li key={tx.id} className="tx-item">
-              <span
-                className={
-                  tx.type === "CREDIT" ? "tx-credit" : "tx-debit"
-                }
-              >
-                {tx.type}
-              </span>
-              <span>₹ {tx.amount}</span>
-              <small>
-                {new Date(tx.timestamp).toLocaleString()}
-              </small>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div style={{ textAlign: "right", marginBottom: "10px" }}>
-        <button onClick={logout} className="button">
+  <div className="dashboard-wrapper">
+    
+    {/* NAVBAR */}
+    <div className="navbar">
+      <h2>💳 Digital Wallet</h2>
+      <div className="nav-right">
+        <span className="user-email">
+          {localStorage.getItem("email")}
+        </span>
+        <button onClick={logout} className="logout-btn">
           Logout
         </button>
       </div>
     </div>
-  );
+
+    <div className="dashboard-content">
+
+      {/* BALANCE CARD */}
+      <div className="balance-card">
+        <div>
+          <p className="balance-label">Available Balance</p>
+          <h1 className="balance-amount">
+            {new Intl.NumberFormat("en-IN", {
+              style: "currency",
+              currency: "INR"
+            }).format(balance)}
+          </h1>
+        </div>
+      </div>
+
+      {/* ACTIONS SECTION */}
+      <div className="actions-grid">
+
+        {/* ADD MONEY */}
+        <div className="action-card">
+          <h3>Add Money</h3>
+          <input
+            type="number"
+            placeholder="Enter amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+          <button onClick={addMoney}>Add Money</button>
+        </div>
+
+        {/* TRANSFER */}
+        <div className="action-card">
+          <h3>Transfer Money</h3>
+          <input
+            type="number"
+            placeholder="To User ID"
+            value={toUserId}
+            onChange={(e) => setToUserId(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Amount"
+            value={transferAmount}
+            onChange={(e) => setTransferAmount(e.target.value)}
+          />
+          <button onClick={transferMoney}>Transfer</button>
+        </div>
+
+      </div>
+
+      {/* TRANSACTIONS */}
+      <div className="transaction-card">
+        <h3>Recent Transactions</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((tx) => (
+              <tr key={tx.id}>
+                <td className={tx.type === "CREDIT" ? "credit" : "debit"}>
+                  {tx.type}
+                </td>
+                <td>
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR"
+                  }).format(tx.amount)}
+                </td>
+                <td>
+                  {new Date(tx.timestamp).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+);
+
 }
 
 export default Dashboard;
