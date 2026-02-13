@@ -4,6 +4,7 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState("");
 
@@ -14,11 +15,15 @@ function Dashboard() {
 
   const userId = localStorage.getItem("userId");
   const email = localStorage.getItem("email");
+  const role = localStorage.getItem("role");
+
   const navigate = useNavigate();
 
   // ---------- API CALLS ----------
 
   const fetchBalance = useCallback(() => {
+    if (!userId) return;
+
     api
       .get(`/api/wallet/balance/${userId}`)
       .then((res) => setBalance(res.data))
@@ -26,6 +31,8 @@ function Dashboard() {
   }, [userId]);
 
   const fetchTransactions = useCallback(() => {
+    if (!userId) return;
+
     api
       .get(`/api/wallet/transactions/${userId}`)
       .then((res) => setTransactions(res.data))
@@ -33,7 +40,7 @@ function Dashboard() {
   }, [userId]);
 
   const addMoney = () => {
-    if (!amount) return;
+    if (!amount || amount <= 0) return;
 
     api
       .post(`/api/wallet/add?userId=${userId}&amount=${amount}`)
@@ -48,7 +55,7 @@ function Dashboard() {
   };
 
   const transferMoney = () => {
-    if (!toUserId || !transferAmount) return;
+    if (!toUserId || !transferAmount || transferAmount <= 0) return;
 
     api
       .post(
@@ -66,27 +73,41 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
     fetchBalance();
     fetchTransactions();
-  }, [fetchBalance, fetchTransactions]);
+  }, [fetchBalance, fetchTransactions, userId, navigate]);
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("email");
-    navigate("/");
+    localStorage.clear();
+    navigate("/login");
   };
 
   // ---------- UI ----------
 
   return (
     <div className="dashboard-wrapper">
-      
+
       {/* NAVBAR */}
       <div className="navbar">
         <h2>💳 Digital Wallet</h2>
+
         <div className="nav-right">
           <span className="user-email">{email}</span>
+
+          {role === "ROLE_ADMIN" && (
+            <button
+              onClick={() => navigate("/admin")}
+              className="admin-btn"
+            >
+              Admin Panel
+            </button>
+          )}
+
           <button onClick={logout} className="logout-btn">
             Logout
           </button>
@@ -124,7 +145,6 @@ function Dashboard() {
               Add Money
             </button>
           </div>
-
 
           {/* TRANSFER MONEY */}
           <div className="action-card">

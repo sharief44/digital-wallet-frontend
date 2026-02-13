@@ -2,33 +2,45 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "./Login.css";
-import "./Signup"
 
 function Login() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
+
       const response = await api.post("/api/users/login", {
         email,
         password,
       });
 
-      // store auth details
+      // 🔐 Store authentication details
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userId", response.data.userId);
       localStorage.setItem("email", response.data.email);
+      localStorage.setItem("role", response.data.role); // ⭐ IMPORTANT
 
-      navigate("/dashboard");
+      // Redirect based on role
+      if (response.data.role === "ROLE_ADMIN") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+
     } catch (err) {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,6 +52,7 @@ function Login() {
         {error && <p className="error-text">{error}</p>}
 
         <form onSubmit={handleLogin}>
+
           <input
             type="email"
             placeholder="Email"
@@ -58,13 +71,20 @@ function Login() {
             required
           />
 
-          <button type="submit" className="login-button">
-            Login
+          <button
+            type="submit"
+            className="login-button"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
+
           <p className="switch-text">
-  Don’t have an account?{" "}
-  <span onClick={() => navigate("/Signup")}>Sign Up</span>
-</p>
+            Don’t have an account?{" "}
+            <span onClick={() => navigate("/signup")}>
+              Sign Up
+            </span>
+          </p>
 
         </form>
       </div>
