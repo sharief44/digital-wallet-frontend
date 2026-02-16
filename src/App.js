@@ -1,39 +1,42 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import PrivateRoute from "./utils/PrivateRoute";
 import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
-  const role = localStorage.getItem("role");
-
   return (
     <BrowserRouter>
       <Routes>
+
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* User Dashboard */}
+        {/* Normal User Dashboard */}
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole="ROLE_USER">
               <Dashboard />
             </PrivateRoute>
           }
         />
 
-        {/* Admin Route */}
+        {/* Admin Dashboard */}
         <Route
           path="/admin"
           element={
-            role === "ROLE_ADMIN"
-              ? <AdminDashboard />
-              : <Navigate to="/dashboard" />
+            <PrivateRoute requiredRole="ROLE_ADMIN">
+              <AdminDashboard />
+            </PrivateRoute>
           }
         />
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/" />} />
+
       </Routes>
     </BrowserRouter>
   );
