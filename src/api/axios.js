@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
  baseURL: "https://digital-wallet-backend-lbdp.onrender.com"
+ 
  // your Spring Boot URL
 });
 

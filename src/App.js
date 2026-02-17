@@ -13,6 +13,7 @@ function App() {
 
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />   {/* ✅ Added this */}
         <Route path="/signup" element={<Signup />} />
 
         {/* User Dashboard (USER + ADMIN allowed) */}
@@ -34,6 +35,9 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Optional: Catch all unknown routes */}
+        <Route path="*" element={<Login />} />
 
       </Routes>
     </BrowserRouter>

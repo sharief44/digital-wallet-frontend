@@ -31,7 +31,7 @@ function AdminDashboard() {
 
   const logout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
 
   if (loading) {
