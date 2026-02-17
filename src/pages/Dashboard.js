@@ -84,7 +84,7 @@ function Dashboard() {
 
   const logout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
   };
 
   // ---------- UI ----------
