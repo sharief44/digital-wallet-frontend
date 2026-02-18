@@ -10,6 +10,8 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const loggedInEmail = localStorage.getItem("email"); // prevent self delete
+
   useEffect(() => {
     loadAdminData();
   }, []);
@@ -26,6 +28,28 @@ function AdminDashboard() {
       alert("Failed to load admin data");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteUser = async (userId, userEmail) => {
+    if (userEmail === loggedInEmail) {
+      alert("You cannot delete yourself!");
+      return;
+    }
+
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/api/admin/users/${userId}`);
+
+      // remove deleted user from UI
+      setUsers(users.filter((u) => u.id !== userId));
+
+      alert("User deleted successfully!");
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Failed to delete user");
     }
   };
 
@@ -86,6 +110,7 @@ function AdminDashboard() {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -95,6 +120,15 @@ function AdminDashboard() {
                   <td>{u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>
+                  <td>
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteUser(u.id, u.email)}
+                      disabled={u.role === "ROLE_ADMIN"}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
